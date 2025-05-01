@@ -34,25 +34,27 @@ const QuestionCard = ({
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto animate-fade-in border-2 border-quiz-light">
+    <Card className="w-full max-w-md mx-auto animate-scale-in border-2 border-quiz-secondary bg-quiz-dark text-white">
       <CardHeader className="bg-quiz-primary text-white rounded-t-lg">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm">Question {currentQuestionIndex + 1} of {totalQuestions}</span>
-          <span className="text-sm bg-white text-quiz-primary px-2 py-1 rounded-full">
+          <span className="text-sm text-quiz-light">Question {currentQuestionIndex + 1} of {totalQuestions}</span>
+          <span className="text-sm bg-quiz-gold text-quiz-dark px-2 py-1 rounded-full font-bold">
             {Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100)}%
           </span>
         </div>
-        <CardTitle className="text-xl font-medium">{question.question}</CardTitle>
+        <CardTitle className="text-xl font-medium text-quiz-gold">{question.question}</CardTitle>
       </CardHeader>
       <CardContent className="pt-6">
         <RadioGroup onValueChange={handleOptionChange} className="space-y-3">
           {question.options.map((option, index) => (
             <div key={index} className={cn(
-              "flex items-center border border-gray-200 rounded-md p-3 hover:bg-gray-50 transition-colors",
-              selectedOption === index ? "border-quiz-primary bg-quiz-light/20" : ""
+              "flex items-center border rounded-md p-3 transition-colors",
+              selectedOption === index 
+                ? "border-quiz-gold bg-quiz-primary/30" 
+                : "border-quiz-secondary hover:bg-quiz-primary/20"
             )}>
-              <RadioGroupItem value={index.toString()} id={`option-${index}`} className="text-quiz-primary" />
-              <Label htmlFor={`option-${index}`} className="ml-3 flex-1 cursor-pointer">
+              <RadioGroupItem value={index.toString()} id={`option-${index}`} className="text-quiz-gold" />
+              <Label htmlFor={`option-${index}`} className="ml-3 flex-1 cursor-pointer text-white">
                 {option}
               </Label>
             </div>
@@ -63,9 +65,9 @@ const QuestionCard = ({
         <Button 
           onClick={handleSubmit} 
           disabled={selectedOption === null}
-          className="bg-quiz-primary hover:bg-quiz-secondary text-white px-8 py-2"
+          className="bg-quiz-secondary hover:bg-quiz-tertiary text-white px-8 py-2"
         >
-          Next Question
+          {currentQuestionIndex < totalQuestions - 1 ? "Next Question" : "Submit Answer"}
         </Button>
       </CardFooter>
     </Card>
