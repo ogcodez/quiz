@@ -146,6 +146,7 @@ const QuizContainer = ({ onViewChange }: QuizContainerProps) => {
         <QuestionCard
           question={quizData.questions[currentQuestionIndex] as QuizQuestion}
           onAnswerSubmit={handleAnswerSubmit}
+          userAnswers={userAnswers}
           currentQuestionIndex={currentQuestionIndex}
           totalQuestions={quizData.questions.length}
           onBackClick={handleBackClick}

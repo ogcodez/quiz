@@ -11,6 +11,7 @@ import { ArrowLeft } from "lucide-react";
 interface QuestionCardProps {
   question: QuizQuestion;
   onAnswerSubmit: (selectedOption: number) => void;
+  userAnswers: number[];
   currentQuestionIndex: number;
   totalQuestions: number;
   onBackClick: () => void;
@@ -19,6 +20,7 @@ interface QuestionCardProps {
 const QuestionCard = ({ 
   question, 
   onAnswerSubmit, 
+  userAnswers,
   currentQuestionIndex, 
   totalQuestions,
   onBackClick
@@ -27,8 +29,8 @@ const QuestionCard = ({
   
   // Reset selection when question changes
   useEffect(() => {
-    setSelectedOption(null);
-  }, [question.id]);
+    setSelectedOption(userAnswers[question.id - 1] ?? null);
+  }, [question.id, userAnswers]);
 
   const handleOptionChange = (value: string) => {
     setSelectedOption(parseInt(value));
@@ -65,7 +67,7 @@ const QuestionCard = ({
         <CardTitle className="text-xl font-medium text-white">{question.question}</CardTitle>
       </CardHeader>
       <CardContent className="pt-6">
-        <RadioGroup onValueChange={handleOptionChange} className="space-y-3" value={selectedOption !== null ? selectedOption.toString() : undefined}>
+        <RadioGroup onValueChange={handleOptionChange} className="space-y-3" value={selectedOption !== null ? selectedOption.toString() : null}>
           {question.options.map((option, index) => (
             <div key={index} className={cn(
               "flex items-center border rounded-md p-3 transition-colors",
