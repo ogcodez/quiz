@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchQuizData } from "@/services/quizService";
 import { QuizResult, QuizQuestion } from "@/types/quiz";
@@ -15,12 +15,22 @@ enum QuizState {
   COMPLETED
 }
 
-const QuizContainer = () => {
+interface QuizContainerProps {
+  onViewChange?: (view: number) => void;
+}
+
+const QuizContainer = ({ onViewChange }: QuizContainerProps) => {
   const [quizState, setQuizState] = useState<QuizState>(QuizState.INTRO);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<number[]>([]);
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (onViewChange) {
+      onViewChange(quizState);
+    }
+  }, [quizState, onViewChange]);
 
   const { data: quizData, isLoading, isError } = useQuery({
     queryKey: ["quizData"],
@@ -34,13 +44,20 @@ const QuizContainer = () => {
   };
 
   const handleAnswerSubmit = (selectedOption: number) => {
-    const newUserAnswers = [...userAnswers, selectedOption];
+    const newUserAnswers = [...userAnswers];
+    newUserAnswers[currentQuestionIndex] = selectedOption;
     setUserAnswers(newUserAnswers);
     
     if (currentQuestionIndex < (quizData?.questions.length || 0) - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       calculateResults(newUserAnswers);
+    }
+  };
+
+  const handleBackClick = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
   };
 
@@ -122,6 +139,7 @@ const QuizContainer = () => {
           onAnswerSubmit={handleAnswerSubmit}
           currentQuestionIndex={currentQuestionIndex}
           totalQuestions={quizData.questions.length}
+          onBackClick={handleBackClick}
         />
       )}
       

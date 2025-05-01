@@ -6,19 +6,22 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { QuizQuestion } from "@/types/quiz";
 import { cn } from "@/lib/utils";
+import { ArrowLeft } from "lucide-react";
 
 interface QuestionCardProps {
   question: QuizQuestion;
   onAnswerSubmit: (selectedOption: number) => void;
   currentQuestionIndex: number;
   totalQuestions: number;
+  onBackClick: () => void;
 }
 
 const QuestionCard = ({ 
   question, 
   onAnswerSubmit, 
   currentQuestionIndex, 
-  totalQuestions 
+  totalQuestions,
+  onBackClick
 }: QuestionCardProps) => {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   
@@ -29,31 +32,43 @@ const QuestionCard = ({
   const handleSubmit = () => {
     if (selectedOption !== null) {
       onAnswerSubmit(selectedOption);
-      setSelectedOption(null);
+      setSelectedOption(null); // Reset selection after submission
     }
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto animate-scale-in border-2 border-quiz-secondary bg-quiz-dark text-white">
-      <CardHeader className="bg-quiz-primary text-white rounded-t-lg">
+    <Card className="w-full max-w-md mx-auto animate-scale-in border-2 border-gray-700 bg-gray-800 text-white">
+      <CardHeader className="bg-gray-700 text-white rounded-t-lg">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-quiz-light">Question {currentQuestionIndex + 1} of {totalQuestions}</span>
-          <span className="text-sm bg-quiz-gold text-quiz-dark px-2 py-1 rounded-full font-bold">
+          <div className="flex items-center gap-2">
+            {currentQuestionIndex > 0 && (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="p-0 h-auto text-white hover:bg-gray-600"
+                onClick={onBackClick}
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+            )}
+            <span className="text-sm text-white">Question {currentQuestionIndex + 1} of {totalQuestions}</span>
+          </div>
+          <span className="text-sm bg-gray-500 text-white px-2 py-1 rounded-full font-bold">
             {Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100)}%
           </span>
         </div>
-        <CardTitle className="text-xl font-medium text-quiz-gold">{question.question}</CardTitle>
+        <CardTitle className="text-xl font-medium text-white">{question.question}</CardTitle>
       </CardHeader>
       <CardContent className="pt-6">
-        <RadioGroup onValueChange={handleOptionChange} className="space-y-3">
+        <RadioGroup onValueChange={handleOptionChange} className="space-y-3" value={selectedOption !== null ? selectedOption.toString() : undefined}>
           {question.options.map((option, index) => (
             <div key={index} className={cn(
               "flex items-center border rounded-md p-3 transition-colors",
               selectedOption === index 
-                ? "border-quiz-gold bg-quiz-primary/30" 
-                : "border-quiz-secondary hover:bg-quiz-primary/20"
+                ? "border-white bg-gray-700/30" 
+                : "border-gray-700 hover:bg-gray-700/20"
             )}>
-              <RadioGroupItem value={index.toString()} id={`option-${index}`} className="text-quiz-gold" />
+              <RadioGroupItem value={index.toString()} id={`option-${index}`} className="text-white" />
               <Label htmlFor={`option-${index}`} className="ml-3 flex-1 cursor-pointer text-white">
                 {option}
               </Label>
@@ -65,7 +80,7 @@ const QuestionCard = ({
         <Button 
           onClick={handleSubmit} 
           disabled={selectedOption === null}
-          className="bg-quiz-secondary hover:bg-quiz-tertiary text-white px-8 py-2"
+          className="bg-gray-500 hover:bg-gray-600 text-white px-8 py-2"
         >
           {currentQuestionIndex < totalQuestions - 1 ? "Next Question" : "Submit Answer"}
         </Button>

@@ -26,15 +26,15 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				quiz: {
-					primary: '#3a0ca3',
-					secondary: '#4361ee',
-					tertiary: '#4895ef',
+					primary: '#3a3a3a',
+					secondary: '#4d4d4d',
+					tertiary: '#5a5a5a',
 					dark: '#1A1F2C',
-					light: '#c8b6ff',
-					accent: '#f72585',
-					correct: '#4cc9f0',
-					wrong: '#f72585',
-					gold: '#ffd700',
+					light: '#e0e0e0',
+					accent: '#757575',
+					correct: '#4ade80',
+					wrong: '#f43f5e',
+					gold: '#ffffff',
 				},
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
@@ -119,18 +119,18 @@ export default {
 				},
 				'glow': {
 					'0%, 100%': { 
-						textShadow: '0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3)' 
+						textShadow: '0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3)' 
 					},
 					'50%': { 
-						textShadow: '0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6)' 
+						textShadow: '0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.6)' 
 					},
 				},
 				'pulse-light': {
 					'0%, 100%': { 
-						boxShadow: '0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3)'
+						boxShadow: '0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3)'
 					},
 					'50%': { 
-						boxShadow: '0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6)'
+						boxShadow: '0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.6)'
 					},
 				},
 				'scale-in': {
