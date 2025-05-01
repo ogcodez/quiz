@@ -70,8 +70,8 @@ const AiAssistant = ({ currentQuestion, isIntro, isResults }: AiAssistantProps) 
       const correctAnswer = questionContext.correctAnswer;
       
       // Eliminate one wrong option
-      let wrongOptions = options.filter((_, idx) => idx !== correctAnswer);
-      let eliminatedOption = wrongOptions[Math.floor(Math.random() * wrongOptions.length)];
+      const wrongOptions = options.filter((_, idx) => idx !== correctAnswer);
+      const eliminatedOption = wrongOptions[Math.floor(Math.random() * wrongOptions.length)];
       
       return `Here's a hint: I can tell you that "${eliminatedOption}" is not the correct answer. Think carefully about the remaining options!`;
     } 
@@ -122,7 +122,6 @@ const AiAssistant = ({ currentQuestion, isIntro, isResults }: AiAssistantProps) 
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.3 }}
-          whileHover={{ scale: 1.1 }}
         >
           <Button className="h-14 w-14 rounded-full bg-gray-700 hover:bg-gray-600">
             <Bot className="h-6 w-6 text-white" />
@@ -136,8 +135,8 @@ const AiAssistant = ({ currentQuestion, isIntro, isResults }: AiAssistantProps) 
       >
         <Card className="border-0 bg-transparent shadow-none">
           <CardHeader className="bg-gray-700 rounded-t-lg py-3">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Bot className="h-5 w-5" />
+            <CardTitle className="text-lg flex items-center gap-2 text-white">
+              <Bot className="h-5 w-5 text-white" />
               Quiz Assistant
             </CardTitle>
           </CardHeader>
