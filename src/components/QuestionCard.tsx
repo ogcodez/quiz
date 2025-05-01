@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -25,6 +25,11 @@ const QuestionCard = ({
 }: QuestionCardProps) => {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   
+  // Reset selection when question changes
+  useEffect(() => {
+    setSelectedOption(null);
+  }, [question.id]);
+
   const handleOptionChange = (value: string) => {
     setSelectedOption(parseInt(value));
   };

@@ -20,7 +20,7 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black py-8">
       <div className="container mx-auto px-4">
         <header className="mb-8 text-center">
-          <h1 className={`text-5xl font-bold text-white mb-2 ${currentView === QuizView.INTRO ? 'animate-glow' : ''}`}>Quiz Master</h1>
+          <h1 className="text-5xl font-bold text-white mb-2">Quiz Master</h1>
           <p className="text-white">Test your knowledge with our millionaire-style quizzes</p>
         </header>
         

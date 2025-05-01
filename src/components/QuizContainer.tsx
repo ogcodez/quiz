@@ -6,6 +6,7 @@ import { QuizResult, QuizQuestion } from "@/types/quiz";
 import QuizIntro from "./QuizIntro";
 import QuestionCard from "./QuestionCard";
 import QuizResults from "./QuizResults";
+import AiAssistant from "./AiAssistant";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 
@@ -104,6 +105,14 @@ const QuizContainer = ({ onViewChange }: QuizContainerProps) => {
     setQuizResult(null);
   };
 
+  // Get current question for AI Assistant
+  const getCurrentQuestion = (): QuizQuestion | null => {
+    if (quizState === QuizState.IN_PROGRESS && quizData) {
+      return quizData.questions[currentQuestionIndex];
+    }
+    return null;
+  };
+
   if (isLoading) {
     return (
       <div className="w-full max-w-md mx-auto p-4">
@@ -146,6 +155,13 @@ const QuizContainer = ({ onViewChange }: QuizContainerProps) => {
       {quizState === QuizState.COMPLETED && quizResult && (
         <QuizResults result={quizResult} onRestartQuiz={restartQuiz} />
       )}
+
+      {/* AI Assistant - available on all pages */}
+      <AiAssistant 
+        currentQuestion={getCurrentQuestion()} 
+        isIntro={quizState === QuizState.INTRO}
+        isResults={quizState === QuizState.COMPLETED}
+      />
     </div>
   );
 };
