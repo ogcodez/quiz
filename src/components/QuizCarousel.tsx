@@ -38,7 +38,7 @@ const QuizCarousel = ({ quizzes, onStartQuiz }: QuizCarouselProps) => {
     >
       <div className="text-center mb-8">
         <motion.h2 
-          className="text-3xl font-bold text-white mb-2 animate-glow"
+          className="text-3xl font-bold text-white mb-2"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
@@ -78,7 +78,7 @@ const QuizCarousel = ({ quizzes, onStartQuiz }: QuizCarouselProps) => {
                   <CardFooter className="pt-4">
                     <Button
                       onClick={() => onStartQuiz(quiz.type)}
-                      className="w-full bg-gray-500 hover:bg-gray-600 text-white"
+                      className="w-full bg-gray-500 hover:bg-gray-600 text-white animate-glow"
                     >
                       Start Quiz
                     </Button>
