@@ -73,8 +73,7 @@ const QuizRecommendationResults = ({
         <CardFooter className="flex justify-between pb-6 pt-4">
           <Button 
             onClick={onShowAllQuizzes} 
-            variant="outline"
-            className="border-gray-500 text-white hover:bg-gray-700"
+            className="bg-gray-500 hover:bg-gray-600 text-white"
           >
             See All Quizzes
           </Button>

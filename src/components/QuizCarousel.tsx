@@ -37,7 +37,14 @@ const QuizCarousel = ({ quizzes, onStartQuiz }: QuizCarouselProps) => {
       animate="show"
     >
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-white mb-2">Choose a Quiz</h2>
+        <motion.h2 
+          className="text-3xl font-bold text-white mb-2 animate-glow"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+        >
+          Choose a Quiz
+        </motion.h2>
         <p className="text-gray-300">Select from our collection of quizzes</p>
       </div>
       

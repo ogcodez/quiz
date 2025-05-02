@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchRecommenderQuiz, fetchGeneralKnowledgeQuiz, fetchMathQuiz, fetchCodingQuiz } from "@/services/quizService";
 import { QuizResult, QuizQuestion, QuizData } from "@/types/quiz";
-import QuizIntro from "./QuizIntro";
+import QuizIntroWrapper from "./QuizIntroWrapper";
 import QuestionCard from "./QuestionCard";
 import QuizResults from "./QuizResults";
 import QuizRecommendationResults from "./QuizRecommendationResults";
@@ -246,7 +245,12 @@ const QuizContainer = ({ onViewChange }: QuizContainerProps) => {
   return (
     <div className="container max-w-4xl mx-auto p-4">
       {quizState === QuizState.INTRO && (
-        <QuizIntro quizData={activeQuizData} onStartQuiz={() => startQuiz(activeQuizType)} isLoading={activeQuizLoading} />
+        <QuizIntroWrapper 
+          quizData={activeQuizData} 
+          onStartQuiz={() => startQuiz(activeQuizType)} 
+          isLoading={activeQuizLoading}
+          onShowAllQuizzes={showQuizCarousel}
+        />
       )}
       
       {quizState === QuizState.IN_PROGRESS && (
