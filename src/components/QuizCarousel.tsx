@@ -78,7 +78,7 @@ const QuizCarousel = ({ quizzes, onStartQuiz }: QuizCarouselProps) => {
                   <CardFooter className="pt-4">
                     <Button
                       onClick={() => onStartQuiz(quiz.type)}
-                      className="w-full bg-gray-500 hover:bg-gray-600 text-white animate-glow"
+                      className="w-full bg-gray-500 hover:bg-gray-600 text-white animate-pulse-light"
                     >
                       Start Quiz
                     </Button>
