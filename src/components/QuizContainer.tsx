@@ -1,7 +1,10 @@
 
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchQuizData } from "@/services/quizService";
+import { fetchRecommenderQuiz } from "@/services/quizService";
+import { fetchGeneralKnowledgeQuiz } from "@/services/quizService";
+import { fetchMathQuiz } from "@/services/quizService";
+import { fetchCodingQuiz } from "@/services/quizService";
 import { QuizResult, QuizQuestion } from "@/types/quiz";
 import QuizIntro from "./QuizIntro";
 import QuestionCard from "./QuestionCard";
@@ -35,7 +38,7 @@ const QuizContainer = ({ onViewChange }: QuizContainerProps) => {
 
   const { data: quizData, isLoading, isError } = useQuery({
     queryKey: ["quizData"],
-    queryFn: fetchQuizData
+    queryFn: fetchRecommenderQuiz
   });
 
   const startQuiz = () => {

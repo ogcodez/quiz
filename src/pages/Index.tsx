@@ -21,7 +21,7 @@ const Index = () => {
       <div className="container mx-auto px-4">
         <header className="mb-8 text-center">
           <h1 className="text-5xl font-bold text-white mb-2">Quiz Master</h1>
-          <p className="text-white">Test your knowledge with our millionaire-style quizzes</p>
+          <p className="text-white">Test your knowledge with our fun quizzes</p>
         </header>
         
         <main className="animate-fade-in">
