@@ -99,11 +99,10 @@ const QuestionCard = ({
           {showBackButton ? (
             <Button 
               onClick={onBackClick}
-              variant="outline"
+              className="bg-gray-500 hover:bg-gray-600 text-white"
               size="sm"
-              className="flex gap-1 items-center border-gray-500 text-white hover:bg-gray-700"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-4 w-4 mr-1" />
               <span>Back</span>
             </Button>
           ) : (

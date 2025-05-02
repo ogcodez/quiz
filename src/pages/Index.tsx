@@ -25,7 +25,7 @@ const Index = () => {
           animate={{ y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
         >
-          <h1 className={`text-5xl font-bold text-white mb-2 ${currentView === QuizState.INTRO ? 'animate-glow' : ''}`}>Quiz Master</h1>
+          <h1 className={`text-5xl font-bold text-white mb-2 ${currentView === QuizState.INTRO || currentView === QuizState.QUIZ_CAROUSEL ? 'animate-glow' : ''}`}>Quiz Master</h1>
           <p className="text-white">Test your knowledge with our fun quizzes</p>
         </motion.header>
         
