@@ -1,28 +1,33 @@
 
 import { useState } from "react";
-import QuizContainer from "@/components/QuizContainer";
-
-enum QuizView {
-  INTRO,
-  QUESTIONS,
-  RESULTS
-}
+import { motion } from "framer-motion";
+import QuizContainer, { QuizState } from "@/components/QuizContainer";
 
 const Index = () => {
-  const [currentView, setCurrentView] = useState<QuizView>(QuizView.INTRO);
+  const [currentView, setCurrentView] = useState<QuizState>(QuizState.INTRO);
   
   // Function to be passed to child components to update the current view
-  const updateView = (view: QuizView) => {
+  const updateView = (view: QuizState) => {
     setCurrentView(view);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black py-8">
+    <motion.div 
+      className="min-h-screen bg-gradient-to-b from-gray-900 to-black py-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="container mx-auto px-4">
-        <header className="mb-8 text-center">
+        <motion.header 
+          className="mb-8 text-center"
+          initial={{ y: -20 }}
+          animate={{ y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+        >
           <h1 className="text-5xl font-bold text-white mb-2">Quiz Master</h1>
           <p className="text-white">Test your knowledge with our fun quizzes</p>
-        </header>
+        </motion.header>
         
         <main className="animate-fade-in">
           <QuizContainer onViewChange={updateView} />
@@ -32,7 +37,7 @@ const Index = () => {
           <p>© 2025 Quiz Master. All rights reserved.</p>
         </footer>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

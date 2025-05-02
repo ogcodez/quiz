@@ -1,11 +1,11 @@
 
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { QuizQuestion } from "@/types/quiz";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { QuizQuestion } from "@/types/quiz";
-import { cn } from "@/lib/utils";
 import { ArrowLeft } from "lucide-react";
 
 interface QuestionCardProps {
@@ -15,84 +15,110 @@ interface QuestionCardProps {
   currentQuestionIndex: number;
   totalQuestions: number;
   onBackClick: () => void;
+  showBackButton: boolean;
 }
 
-const QuestionCard = ({ 
-  question, 
-  onAnswerSubmit, 
+const QuestionCard = ({
+  question,
+  onAnswerSubmit,
   userAnswers,
-  currentQuestionIndex, 
+  currentQuestionIndex,
   totalQuestions,
-  onBackClick
+  onBackClick,
+  showBackButton
 }: QuestionCardProps) => {
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  
-  // Reset selection when question changes
-  useEffect(() => {
-    setSelectedOption(userAnswers[question.id - 1] ?? null);
-  }, [question.id, userAnswers]);
+  // Make sure we don't preselect an option when navigating to a new question
+  // Use local state to track the current selection in this component
+  const [selectedOption, setSelectedOption] = useState<number | null>(
+    userAnswers[currentQuestionIndex] !== undefined ? userAnswers[currentQuestionIndex] : null
+  );
 
-  const handleOptionChange = (value: string) => {
+  const handleOptionSelect = (value: string) => {
     setSelectedOption(parseInt(value));
   };
 
   const handleSubmit = () => {
     if (selectedOption !== null) {
       onAnswerSubmit(selectedOption);
-      setSelectedOption(null); // Reset selection after submission
+      // Reset selected option for the next question
+      setSelectedOption(null);
     }
   };
 
+  // Update selected option when navigating between questions
+  // This is needed to show the previously selected answer when going back
+  // But we ensure it's null when moving to a new question forward
+  useEffect(() => {
+    setSelectedOption(userAnswers[currentQuestionIndex] !== undefined ? 
+      userAnswers[currentQuestionIndex] : null);
+  }, [currentQuestionIndex, userAnswers]);
+
   return (
-    <Card className="w-full max-w-md mx-auto animate-scale-in border-2 border-gray-700 bg-gray-800 text-white">
-      <CardHeader className="bg-gray-700 text-white rounded-t-lg">
-        <div className="flex justify-between items-center mb-2">
-          <div className="flex items-center gap-2">
-            {currentQuestionIndex > 0 && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="p-0 h-auto text-white hover:bg-gray-600"
-                onClick={onBackClick}
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-            )}
-            <span className="text-sm text-white">Question {currentQuestionIndex + 1} of {totalQuestions}</span>
-          </div>
-          <span className="text-sm bg-gray-500 text-white px-2 py-1 rounded-full font-bold">
-            {Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100)}%
-          </span>
-        </div>
-        <CardTitle className="text-xl font-medium text-white">{question.question}</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-6">
-        <RadioGroup onValueChange={handleOptionChange} className="space-y-3" value={selectedOption !== null ? selectedOption.toString() : null}>
-          {question.options.map((option, index) => (
-            <div key={index} className={cn(
-              "flex items-center border rounded-md p-3 transition-colors",
-              selectedOption === index 
-                ? "border-white bg-gray-700/30" 
-                : "border-gray-700 hover:bg-gray-700/20"
-            )}>
-              <RadioGroupItem value={index.toString()} id={`option-${index}`} className="text-white" />
-              <Label htmlFor={`option-${index}`} className="ml-3 flex-1 cursor-pointer text-white">
-                {option}
-              </Label>
+    <motion.div
+      key={`question-${currentQuestionIndex}`}
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ duration: 0.3 }}
+      className="w-full max-w-md mx-auto"
+    >
+      <Card className="border-2 border-gray-700 bg-gray-800 text-white">
+        <CardHeader className="bg-gray-700 rounded-t-lg pb-4">
+          <div className="flex justify-between items-center">
+            <div className="text-sm text-gray-300">Question {currentQuestionIndex + 1} of {totalQuestions}</div>
+            <div className="px-3 py-1 bg-gray-600 text-white text-xs rounded-full">
+              {Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100)}%
             </div>
-          ))}
-        </RadioGroup>
-      </CardContent>
-      <CardFooter className="flex justify-center pt-2 pb-6">
-        <Button 
-          onClick={handleSubmit} 
-          disabled={selectedOption === null}
-          className="bg-gray-500 hover:bg-gray-600 text-white px-8 py-2"
-        >
-          {currentQuestionIndex < totalQuestions - 1 ? "Next Question" : "Submit Answer"}
-        </Button>
-      </CardFooter>
-    </Card>
+          </div>
+          <CardTitle className="text-xl mt-3 text-white">{question.question}</CardTitle>
+        </CardHeader>
+        <CardContent className="pt-4">
+          <RadioGroup 
+            value={selectedOption !== null ? selectedOption.toString() : undefined} 
+            onValueChange={handleOptionSelect}
+            className="space-y-3"
+          >
+            {question.options.map((option, index) => (
+              <div key={index} className="flex items-center space-x-2 bg-gray-700 p-3 rounded-lg hover:bg-gray-600 transition-colors">
+                <RadioGroupItem 
+                  value={index.toString()} 
+                  id={`option-${index}`} 
+                  className="text-white border-gray-400"
+                />
+                <Label 
+                  htmlFor={`option-${index}`} 
+                  className="text-white flex-grow cursor-pointer py-1"
+                >
+                  {option}
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+        </CardContent>
+        <CardFooter className="flex justify-between py-4">
+          {showBackButton ? (
+            <Button 
+              onClick={onBackClick}
+              variant="outline"
+              size="sm"
+              className="flex gap-1 items-center border-gray-500 text-white hover:bg-gray-700"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span>Back</span>
+            </Button>
+          ) : (
+            <div></div>
+          )}
+          <Button 
+            onClick={handleSubmit} 
+            disabled={selectedOption === null}
+            className="bg-gray-500 hover:bg-gray-600 text-white"
+          >
+            {currentQuestionIndex === totalQuestions - 1 ? 'Finish' : 'Next'}
+          </Button>
+        </CardFooter>
+      </Card>
+    </motion.div>
   );
 };
 
