@@ -8,6 +8,7 @@ import QuizResults from "./QuizResults";
 import QuizRecommendationResults from "./QuizRecommendationResults";
 import QuizCarousel from "./QuizCarousel";
 import AiAssistant from "./AiAssistant";
+import NavigationBar from "./NavigationBar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 
@@ -243,7 +244,12 @@ const QuizContainer = ({ onViewChange }: QuizContainerProps) => {
   ].filter(q => q.data !== undefined) as { type: QuizType, data: QuizData }[];
 
   return (
-    <div className="container max-w-4xl mx-auto p-4">
+    <div className="container max-w-4xl mx-auto p-4 relative">
+      <NavigationBar 
+        onShowAllQuizzes={showQuizCarousel} 
+        isVisible={quizState === QuizState.IN_PROGRESS || quizState === QuizState.COMPLETED} 
+      />
+      
       {quizState === QuizState.INTRO && (
         <QuizIntroWrapper 
           quizData={activeQuizData} 
