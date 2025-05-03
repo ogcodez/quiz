@@ -193,22 +193,22 @@ const AiAssistant: React.FC<AiAssistantProps> = ({
     }
     
     // General Knowledge hints
-    if (text.includes("capital")) {
+    if (questionText.includes("capital")) {
       return "Think about famous European cities and their countries.";
-    } else if (text.includes("planet")) {
+    } else if (questionText.includes("planet")) {
       return "Consider the colors associated with each planet in our solar system.";
-    } else if (text.includes("mona lisa")) {
+    } else if (questionText.includes("mona lisa")) {
       return "This famous painting was created during the Renaissance period.";
-    } else if (text.includes("ocean")) {
+    } else if (questionText.includes("ocean")) {
       return "Consider which ocean covers the largest area of Earth's surface.";
-    } else if (text.includes("element") || text.includes("symbol")) {
+    } else if (questionText.includes("element") || questionText.includes("symbol")) {
       return "Remember the periodic table and common chemical symbols.";
     } 
     
     // Coding hints
-    else if (text.includes("html")) {
+    else if (questionText.includes("html")) {
       return "Think about what these letters might stand for in web development.";
-    } else if (text.includes("javascript") || text.includes("code")) {
+    } else if (questionText.includes("javascript") || questionText.includes("code")) {
       return "Consider the basic syntax and common patterns in programming.";
     } else {
       return "Think carefully about the question and consider what you already know about this topic.";
