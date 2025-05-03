@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/input";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Send, MessageCircle, X } from "lucide-react";
+import { Send, X, Bot } from "lucide-react";
 import { QuizQuestion } from "@/types/quiz";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -227,7 +227,7 @@ const AiAssistant: React.FC<AiAssistantProps> = ({
           onClick={() => setIsOpen(!isOpen)}
           className="rounded-full w-12 h-12 p-0 bg-gray-600 hover:bg-gray-700 text-white shadow-lg"
         >
-          {isOpen ? <X size={20} /> : <MessageCircle size={20} />}
+          {isOpen ? <X size={20} /> : <Bot/>}
         </Button>
       </motion.div>
 
