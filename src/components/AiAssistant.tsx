@@ -33,37 +33,45 @@ const AiAssistant: React.FC<AiAssistantProps> = ({
     content: "Hi! I'm your quiz assistant. How can I help you?" 
   }]);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasInitialMessage, setHasInitialMessage] = useState(false);
 
   useEffect(() => {
-    // Add a contextual message when the quiz state changes
-    if (isIntro) {
-      addContextMessage("You're about to start a quiz. I can help explain how the quiz works if you have questions.");
-    } else if (isResults) {
-      addContextMessage("You've completed the quiz. Need any clarification about your results?");
-    } else if (isCarousel) {
-      addContextMessage("You're browsing our quiz selection. I can help you decide which quiz might be most interesting for you.");
-    } else if (currentQuestion) {
-      // Don't add a new message each time if we're already on questions
-      if (!messages.some(m => m.content.includes("If you need a hint"))) {
-        addContextMessage("If you need a hint or have a question about this quiz question, just ask me!");
-      }
-    }
-  }, [isIntro, isResults, isCarousel, currentQuestion?.id]);
+    // Only prepare contextual messages when the chat is opened
+    // They will be shown the first time the user opens the chat in a new context
+    if (!isOpen || hasInitialMessage) return;
 
-  const addContextMessage = (content: string) => {
-    setMessages(prev => {
-      // Check if the last message is from the assistant and not identical to new content
-      if (prev.length > 0 && 
-          prev[prev.length - 1].role === "assistant" && 
-          prev[prev.length - 1].content !== content) {
-        return [...prev, { role: "assistant", content }];
-      } else if (prev.length === 1 && prev[0].role === "assistant" && prev[0].content.startsWith("Hi! I'm your quiz")) {
-        // If we only have the intro message, update it
-        return [prev[0], { role: "assistant", content }];
-      }
-      return prev;
-    });
-  };
+    // Track that we've shown the initial message
+    setHasInitialMessage(true);
+    
+    // Only prepare contextual message for when the chat is open
+    let contextMessage = "";
+    
+    if (isIntro) {
+      contextMessage = "You're about to start a quiz. I can help explain how the quiz works if you have questions.";
+    } else if (isResults) {
+      contextMessage = "You've completed the quiz. Need any clarification about your results?";
+    } else if (isCarousel) {
+      contextMessage = "You're browsing our quiz selection. I can help you decide which quiz might be most interesting for you.";
+    } else if (currentQuestion) {
+      contextMessage = "If you need a hint or have a question about this quiz question, just ask me!";
+    }
+    
+    // Only add the context message if we have one and the chat is open
+    if (contextMessage) {
+      setMessages([{ 
+        role: "assistant", 
+        content: "Hi! I'm your quiz assistant. How can I help you?" 
+      }, {
+        role: "assistant",
+        content: contextMessage
+      }]);
+    }
+  }, [isOpen, isIntro, isResults, isCarousel, currentQuestion, hasInitialMessage]);
+
+  // Reset initial message flag when context changes
+  useEffect(() => {
+    setHasInitialMessage(false);
+  }, [isIntro, isResults, isCarousel, currentQuestion?.id]);
 
   const handleSend = () => {
     if (!input.trim()) return;
@@ -149,8 +157,42 @@ const AiAssistant: React.FC<AiAssistantProps> = ({
 
   const generateHint = (question: QuizQuestion): string => {
     // Generate contextual hints based on the question content
-    const text = question.question.toLowerCase();
+    const questionText = question.question.toLowerCase();
     
+    // Math specific hints
+    if (questionText.includes("math") || 
+        questionText.includes("calculate") || 
+        questionText.includes("solve") || 
+        questionText.includes("equation") || 
+        questionText.includes("formula") ||
+        questionText.includes("value") ||
+        questionText.includes("sum") ||
+        questionText.includes("product") ||
+        questionText.includes("divide") ||
+        questionText.includes("multiply") ||
+        questionText.includes("subtract") ||
+        questionText.includes("add")) {
+      
+      if (questionText.includes("percentage") || questionText.includes("percent")) {
+        return "Remember that percentage calculations involve dividing by 100. Think about what the percentage represents in relation to the whole.";
+      }
+      if (questionText.includes("fraction")) {
+        return "When working with fractions, think about the relationship between the numerator (top number) and denominator (bottom number).";
+      }
+      if (questionText.includes("area") || questionText.includes("perimeter") || questionText.includes("volume")) {
+        return "Recall the appropriate formula for the geometric shape mentioned in the question.";
+      }
+      if (questionText.includes("probability")) {
+        return "Probability is calculated as (favorable outcomes) ÷ (total possible outcomes).";
+      }
+      if (questionText.includes("sequence") || questionText.includes("pattern")) {
+        return "Look for a pattern in the numbers. What operation connects each number to the next?";
+      }
+      
+      return "Break down the problem step by step and follow the order of operations (PEMDAS): Parentheses, Exponents, Multiplication/Division, Addition/Subtraction.";
+    }
+    
+    // General Knowledge hints
     if (text.includes("capital")) {
       return "Think about famous European cities and their countries.";
     } else if (text.includes("planet")) {
@@ -161,9 +203,10 @@ const AiAssistant: React.FC<AiAssistantProps> = ({
       return "Consider which ocean covers the largest area of Earth's surface.";
     } else if (text.includes("element") || text.includes("symbol")) {
       return "Remember the periodic table and common chemical symbols.";
-    } else if (text.includes("math") || text.includes("calculate") || text.includes("solve")) {
-      return "Break down the problem step by step and follow the order of operations.";
-    } else if (text.includes("html")) {
+    } 
+    
+    // Coding hints
+    else if (text.includes("html")) {
       return "Think about what these letters might stand for in web development.";
     } else if (text.includes("javascript") || text.includes("code")) {
       return "Consider the basic syntax and common patterns in programming.";
