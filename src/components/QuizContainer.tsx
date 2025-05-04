@@ -88,11 +88,11 @@ const QuizContainer = ({ onViewChange }: QuizContainerProps) => {
   // Function to determine the recommended quiz based on user answers
   const determineRecommendedQuiz = (answers: number[]): QuizType => {
     // Count frequencies of answers
-    const answerCounts = [0, 0, 0, 0]; // general, math, coding, general (last is just for index alignment)
+    const answerCounts = [0, 0, 0]; // general, math, coding, general (last is just for index alignment)
     
     answers.forEach(answer => {
       if (answer >= 0 && answer < 4) {
-        answerCounts[answer]++;
+        answerCounts[answer === 3 ? 0 : answer]++;
       }
     });
     
